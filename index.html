@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash Register</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Modern Cash Register</h1>
+        </header>
+
+        <main class="register-container">
+            <div class="input-section">
+                <div class="price-display">
+                    <h2>Current Price</h2>
+                    <div class="price-amount" id="price-display">$0.00</div>
+                </div>
+
+                <div class="cash-input-section">
+                    <label for="cash">Customer Cash:</label>
+                    <div class="input-wrapper">
+                        <span class="dollar-sign">$</span>
+                        <input type="number" id="cash" placeholder="Enter amount" step="0.01" min="0">
+                    </div>
+                    <button id="purchase-btn">Calculate Change</button>
+                </div>
+            </div>
+
+            <div class="result-section">
+                <h2>Change Due</h2>
+                <div class="change-container">
+                    <p id="change-due">Awaiting transaction...</p>
+                </div>
+            </div>
+
+            <div class="drawer-section">
+                <h2>Cash Drawer</h2>
+                <div class="drawer-display" id="drawer-display">
+                    <!-- Cash drawer contents will be displayed here dynamically -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
