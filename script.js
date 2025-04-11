@@ -56,34 +56,34 @@ function displayCashDrawer() {
 function calculateChange(price, cash, cid) {
   let changeDue = cash - price;
 
-  // If cash is less than price, return early
-  if (changeDue < 0) {
-    return { status: "INSUFFICIENT_PAYMENT" };
-  }
+  if (changeDue < 0) return { status: "INSUFFICIENT_PAYMENT" };
+  if (changeDue === 0) return { status: "EXACT_CASH" };
 
-  // If change due is zero, return exact cash
-  if (changeDue === 0) {
-    return { status: "EXACT_CASH" };
-  }
+  const totalCid = calculateTotalCid(cid);
+  changeDue = roundToTwo(changeDue);
 
-  // Calculate total cash in drawer
-  const totalCid = cid.reduce((acc, [_, amount]) => acc + amount, 0);
+  if (changeDue === totalCid) return { status: "CLOSED", change: cid };
+  if (changeDue > totalCid) return { status: "INSUFFICIENT_FUNDS" };
 
-  // Round to avoid floating point errors
-  changeDue = Math.round(changeDue * 100) / 100;
+  const sortedCurrency = getSortedCurrency();
+  const register = createRegister(cid);
+  const changeArray = calculateChangeArray(changeDue, sortedCurrency, register);
 
-  // If change due equals total cash in drawer, return all cash
-  if (changeDue === totalCid) {
-    return { status: "CLOSED", change: cid };
-  }
+  if (changeArray.changeDue > 0) return { status: "INSUFFICIENT_FUNDS" };
 
-  // If change due is more than total cash in drawer, return insufficient funds
-  if (changeDue > totalCid) {
-    return { status: "INSUFFICIENT_FUNDS" };
-  }
+  return { status: "OPEN", change: changeArray.change };
+}
 
-  // Sort cid from highest to lowest denomination
-  const sortedCurrency = [
+function calculateTotalCid(cid) {
+  return cid.reduce((acc, [_, amount]) => acc + amount, 0);
+}
+
+function roundToTwo(num) {
+  return Math.round(num * 100) / 100;
+}
+
+function getSortedCurrency() {
+  return [
     ["ONE HUNDRED", 100],
     ["TWENTY", 20],
     ["TEN", 10],
@@ -94,56 +94,35 @@ function calculateChange(price, cash, cid) {
     ["NICKEL", 0.05],
     ["PENNY", 0.01],
   ];
+}
 
-  // Create a register object for easier lookup
+function createRegister(cid) {
   const register = {};
   cid.forEach(([currency, amount]) => {
     register[currency] = amount;
   });
+  return register;
+}
 
-  // Calculate change to give
+function calculateChangeArray(changeDue, sortedCurrency, register) {
   const changeArray = [];
 
   for (const [currency, unit] of sortedCurrency) {
     let currencyAmount = register[currency];
     let currencyCount = 0;
 
-    // Calculate how many of this currency unit we can use
     while (changeDue >= unit && currencyAmount >= unit) {
-      changeDue = Math.round((changeDue - unit) * 100) / 100;
-      currencyAmount = Math.round((currencyAmount - unit) * 100) / 100;
-      currencyCount = Math.round((currencyCount + unit) * 100) / 100;
+      changeDue = roundToTwo(changeDue - unit);
+      currencyAmount = roundToTwo(currencyAmount - unit);
+      currencyCount = roundToTwo(currencyCount + unit);
     }
 
-    // If we used any of this currency, add it to the change array
     if (currencyCount > 0) {
       changeArray.push([currency, currencyCount]);
     }
   }
 
-  // Final check if we have exact change
-  if (changeDue > 0.01) {
-    return { status: "INSUFFICIENT_FUNDS" };
-  }
-
-  // Handle potential rounding errors for small amounts
-  if (changeDue > 0 && changeDue <= 0.01 && register["PENNY"] >= changeDue) {
-    // Add remaining pennies to make change exact
-    const lastPenny = changeArray.findIndex((item) => item[0] === "PENNY");
-    if (lastPenny !== -1) {
-      changeArray[lastPenny][1] =
-        Math.round((changeArray[lastPenny][1] + changeDue) * 100) / 100;
-    } else {
-      changeArray.push(["PENNY", changeDue]);
-    }
-    changeDue = 0;
-  }
-
-  if (changeDue > 0) {
-    return { status: "INSUFFICIENT_FUNDS" };
-  }
-
-  return { status: "OPEN", change: changeArray };
+  return { change: changeArray, changeDue };
 }
 
 // Format change for display
