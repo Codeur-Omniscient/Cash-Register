@@ -1,0 +1,195 @@
+/* Modern CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  color: #2c3e50;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.register-container {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Input Section */
+.input-section {
+  padding: 2rem;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.price-display {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 1.5rem;
+  border-radius: 8px;
+  backdrop-filter: blur(5px);
+}
+
+.price-amount {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+.cash-input-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cash-input-section label {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.input-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.dollar-sign {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+}
+
+#cash {
+  width: 100%;
+  padding: 1rem 1rem 1rem 2.5rem;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+#cash:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+#purchase-btn {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#purchase-btn:hover {
+  background-color: #2ecc71;
+}
+
+/* Result Section */
+.result-section {
+  padding: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.result-section h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.change-container {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+}
+
+#change-due {
+  font-size: 1.2rem;
+  color: #2c3e50;
+  word-wrap: break-word;
+}
+
+/* Drawer Section */
+.drawer-section {
+  padding: 2rem;
+}
+
+.drawer-section h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.drawer-display {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.currency-item {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #f39c12;
+}
+
+.currency-name {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.currency-amount {
+  color: #7f8c8d;
+  margin-top: 0.3rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .input-section {
+    grid-template-columns: 1fr;
+  }
+
+  .drawer-display {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+}
+
+/* Status colors */
+.status-open {
+  border-left-color: #27ae60;
+}
+
+.status-closed {
+  border-left-color: #f39c12;
+}
+
+.status-insufficient {
+  border-left-color: #e74c3c;
+}
